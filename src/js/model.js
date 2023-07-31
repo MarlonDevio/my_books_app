@@ -1,4 +1,4 @@
-import { API_URL, API_KEY } from '../../.env.js';
+import { API_URL, API_KEY } from '../../env.js';
 import { getJSON } from './helpers.js';
 
 export const state = {
@@ -9,8 +9,7 @@ Load book
 ////////// */
 export const loadBook = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}/${id}&key=${API_KEY}`);
-
+    const data = await getJSON(`${API_URL}/${id}`);
     const { volumeInfo } = data;
 
     state.book = {
@@ -26,7 +25,6 @@ export const loadBook = async function (id) {
       avgRating: volumeInfo.averageRating,
       imgLinks: volumeInfo.imageLinks,
     }
-
     console.log(state.book);
 
   } catch (error) {
@@ -36,5 +34,5 @@ export const loadBook = async function (id) {
 
 };
 
-loadBook('buc0AAAAMAAJ');
+
 
