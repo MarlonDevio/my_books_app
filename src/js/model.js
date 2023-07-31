@@ -7,9 +7,9 @@ export const state = {
 /* //////////
 Load book
 ////////// */
-export const loadBook = async function(id) {
+export const loadBook = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}/${id}`);
+    const data = await getJSON(`${API_URL}/${id}&key=${API_KEY}`);
 
     const { volumeInfo } = data;
 
@@ -30,7 +30,8 @@ export const loadBook = async function(id) {
     console.log(state.book);
 
   } catch (error) {
-    console.error(error);
+    console.error(`${error} 💣💣💣💣 `);
+    throw error;
   }
 
 };
