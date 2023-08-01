@@ -32,8 +32,6 @@ export const loadBook = async function(id) {
 
     console.log(state.volumeInfo);
   } catch (err) {
-    // temp error handling
-    console.error(`${err} 💥💥💥`);
     throw err;
   }
 };

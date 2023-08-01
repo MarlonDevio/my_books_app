@@ -4,7 +4,7 @@ class BookView {
   _parentElement = document.querySelector('.book');
   _data;
   _errorMessage = 'We could not find that book. Please try another one!';
-
+  _message = '';
 
   render(data) {
     // book gets stored in the state object, then gets passed as the data argument
@@ -18,6 +18,12 @@ class BookView {
     this._parentElement.innerHTML = '';
   }
 
+  //publisher subscriber pattern => addHandlerRender is the publisher,
+  // handler is the subscriber
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
   renderSpinner() {
     const markup = `
   <div class='spinner'>
@@ -28,6 +34,36 @@ class BookView {
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   };
+
+  renderError(message = this._errorMessage) {
+    const markup = `
+    <div class='error'>
+      <div>
+        <svg>
+          <use href='${icons}#icon-alert-triangle'></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>
+`;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+
+  renderMessage(message = this._message) {
+    const markup = `
+    <div class='message'>
+      <div>
+        <svg>
+          <use href='${icons}#icon-smile'></use>
+        </svg>
+      </div>
+      <p>${message}</p>
+    </div>
+`;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
 
   _generateMarkup() {
     return `

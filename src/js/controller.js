@@ -15,9 +15,11 @@ const controlBooks = async function() {
     bookView.render(model.state.volumeInfo);
 
   } catch (err) {
-    alert(err);
-    console.log(err);
+    bookView.renderError();
   }
 };
 
-['hashchange', 'load'].forEach(ev => window.addEventListener(ev, controlBooks));
+const init = function() {
+  bookView.addHandlerRender(controlBooks);
+}
+init();
