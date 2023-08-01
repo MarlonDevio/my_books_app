@@ -1,6 +1,6 @@
 import { API_KEY } from '../../env.js';
 import { API_URL } from './config.js';
-import {getJSON} from './helpers.js';
+import { getJSON } from './helpers.js';
 
 export const state = {
   volumeInfo: {},
@@ -8,7 +8,7 @@ export const state = {
 
 // Change our state object, live connection between exports and imports (
 // controller imports state, model exports state)
-export const loadBook = async function(id) {
+export const loadBook = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
 
@@ -20,7 +20,6 @@ export const loadBook = async function(id) {
       publisher: volumeInfo.publisher,
       publishedDate: volumeInfo.publishedDate,
       description: volumeInfo.description,
-      selfLink: data.selfLink,
       previewLink: volumeInfo.previewLink,
       industryIdentifiers: volumeInfo.industryIdentifiers,
       pageCount: volumeInfo.pageCount,
@@ -35,3 +34,41 @@ export const loadBook = async function(id) {
     throw err;
   }
 };
+
+/*
+Loading search results
+ */
+
+export const loadSearchResults = async function (query) {
+  try {
+    const data = await getJSON(
+      `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${API_KEY}`,
+    );
+    console.log(data);
+    // later on the id of the results gets stored in the hash on the html.
+    // this way, on refresh/click/hashchange it will trigger the loadBook function!
+    const results = data.items.map((item) => {
+      return {
+        id: item.id,
+        title: item.volumeInfo.title,
+        authors: item.volumeInfo.authors?.[0],
+        publisher: item.volumeInfo.publisher,
+        publishedDate: item.volumeInfo.publishedDate,
+        description: item.volumeInfo.description,
+        previewLink: item.volumeInfo.previewLink,
+        industryIdentifiers: item.volumeInfo.industryIdentifiers,
+        pageCount: item.volumeInfo.pageCount,
+        dimensions: item.volumeInfo.dimensions,
+        categories: item.volumeInfo.categories,
+        avgRating: item.volumeInfo.averageRating,
+        image: item.volumeInfo.imageLinks?.thumbnail,
+      };
+    });
+    console.log(results);
+  } catch (err) {
+    console.error(`${err} error`);
+    throw err;
+  }
+};
+
+loadSearchResults('The expectation effect');
