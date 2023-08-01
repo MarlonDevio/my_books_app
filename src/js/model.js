@@ -47,6 +47,9 @@ export const loadSearchResults = async function (query) {
     console.log(data);
     // later on the id of the results gets stored in the hash on the html.
     // this way, on refresh/click/hashchange it will trigger the loadBook function!
+    // the loadBook will then run it's own API call, based on the data above
+
+    //TODO => adjust the object, too much that that won't be used. Performance
     const results = data.items.map((item) => {
       return {
         id: item.id,
