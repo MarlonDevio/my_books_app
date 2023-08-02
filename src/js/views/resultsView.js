@@ -1,8 +1,11 @@
 import View from './View.js';
 import icons from '../../img/icons.svg';
 
+//TODO error rendering in the search
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
+  _errorMessage = 'No books found. Please try again! ;)';
+  _successMessage= '';
 
   _generateMarkup() {
     console.log(this._data);

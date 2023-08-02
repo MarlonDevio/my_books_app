@@ -51,9 +51,6 @@ class BookView extends View {
       </div>
 
       <div class='book__user-generated'>
-        <svg>
-          <use href='src/img/icons.svg#icon-user'></use>
-        </svg>
       </div>
       <button class='btn--round'>
         <svg class=''>
