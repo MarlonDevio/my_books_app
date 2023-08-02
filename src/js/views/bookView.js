@@ -1,68 +1,15 @@
+import View from './View.js';
 import icons from '../../img/icons.svg';
 
-class BookView {
+class BookView extends View {
   _parentElement = document.querySelector('.book');
-  _data;
   _errorMessage = 'We could not find that book. Please try another one!';
   _message = '';
 
-  render(data) {
-    // book gets stored in the state object, then gets passed as the data argument
-    this._data = data;
-    const markup = this._generateMarkup();
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  _clear() {
-    this._parentElement.innerHTML = '';
-  }
-
-  //publisher subscriber pattern => addHandlerRender is the publisher,
-  // handler is the subscriber
   addHandlerRender(handler) {
+    //publisher subscriber pattern => addHandlerRender is the publisher,
+    // handler is the subscriber
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
-  }
-
-  renderSpinner() {
-    const markup = `
-  <div class='spinner'>
-  <svg>
-    <use href='${icons}#icon-loader'></use>
-  </svg>
-</div>`;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  };
-
-  renderError(message = this._errorMessage) {
-    const markup = `
-    <div class='error'>
-      <div>
-        <svg>
-          <use href='${icons}#icon-alert-triangle'></use>
-        </svg>
-      </div>
-      <p>${message}</p>
-    </div>
-`;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-
-  renderMessage(message = this._message) {
-    const markup = `
-    <div class='message'>
-      <div>
-        <svg>
-          <use href='${icons}#icon-smile'></use>
-        </svg>
-      </div>
-      <p>${message}</p>
-    </div>
-`;
-    this._clear();
-    this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
   _generateMarkup() {
@@ -118,7 +65,7 @@ class BookView {
     <div class='book__categories'>
       <h2 class='heading--2'>book categories</h2>
       <ul class='book__categorie-list'>
-      ${this._data.categories.map(this._generateMarkupCategorie)
+      ${this._data.categories.map(this._generateMarkupCategory)
       .join('')}
       </ul>
     </div>
@@ -143,7 +90,7 @@ class BookView {
     </div>`;
   }
 
-  _generateMarkupCategorie(cat) {
+  _generateMarkupCategory(cat) {
     return `
       <li class='book__categorie'>
        <svg class='book__icon'>

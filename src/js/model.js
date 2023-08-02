@@ -4,11 +4,15 @@ import { getJSON } from './helpers.js';
 
 export const state = {
   volumeInfo: {},
+  search: {
+    query: '',
+    results: [],
+  },
 };
 
 // Change our state object, live connection between exports and imports (
 // controller imports state, model exports state)
-export const loadBook = async function (id) {
+export const loadBook = async function(id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
 
@@ -29,7 +33,6 @@ export const loadBook = async function (id) {
       image: volumeInfo.imageLinks.thumbnail,
     };
 
-    console.log(state.volumeInfo);
   } catch (err) {
     throw err;
   }
@@ -39,18 +42,18 @@ export const loadBook = async function (id) {
 Loading search results
  */
 
-export const loadSearchResults = async function (query) {
+export const loadSearchResults = async function(query) {
   try {
+    state.search.query = query;
     const data = await getJSON(
       `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${API_KEY}`,
     );
-    console.log(data);
     // later on the id of the results gets stored in the hash on the html.
     // this way, on refresh/click/hashchange it will trigger the loadBook function!
     // the loadBook will then run it's own API call, based on the data above
 
     //TODO => adjust the object, too much that that won't be used. Performance
-    const results = data.items.map((item) => {
+    state.search.results = data.items.map((item) => {
       return {
         id: item.id,
         title: item.volumeInfo.title,
@@ -67,11 +70,9 @@ export const loadSearchResults = async function (query) {
         image: item.volumeInfo.imageLinks?.thumbnail,
       };
     });
-    console.log(results);
   } catch (err) {
     console.error(`${err} error`);
     throw err;
   }
 };
 
-loadSearchResults('The expectation effect');
