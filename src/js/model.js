@@ -17,7 +17,7 @@ export const state = {
 export const loadBook = async function(id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
-
+    console.log(data);
     const { volumeInfo } = data;
     state.volumeInfo = {
       id: data.id,
@@ -33,8 +33,11 @@ export const loadBook = async function(id) {
       categories: volumeInfo.categories,
       avgRating: volumeInfo.averageRating,
       image: volumeInfo.imageLinks.thumbnail,
+      //TODO ==> Salebility check if for sale or not
+      price: data.saleInfo.listPrice?.amount,
+      currency: data.saleInfo.listPrice?.currencyCode,
     };
-
+    console.log(state.volumeInfo.price);
   } catch (err) {
     throw err;
   }
