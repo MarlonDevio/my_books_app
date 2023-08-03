@@ -38,7 +38,7 @@ const controlSearchResults = async function () {
 
     // 3) Render results
     // resultsView.render(model.state.search.results);
-    resultsView.render(model.getSearchResultsPage(1));
+    resultsView.render(model.getSearchResultsPage());
 
     // 4) Render initial pagination buttons
     paginationView.render(model.state.search);
@@ -46,14 +46,24 @@ const controlSearchResults = async function () {
   } catch (err) {
     console.log(err);
   }
+};
+
+// controlPagination is the controller function for the pagination buttons
+// (next, prev, etc) => it will be called by the event listener in the
+// paginationView module
+// the goToPage argument is the page number that is clicked on
+const controlPagination = function(goToPage) {
+  // 1) Render NEW results
+  resultsView.render(model.getSearchResultsPage(goToPage));
+
+  // 2) Render NEW pagination buttons
+  paginationView.render(model.state.search);
 }
 
-const controlPagination = function() {
-  console.log('Pag controller')
-}
 const init = function() {
   bookView.addHandlerRender(controlBooks);
   searchView.addHandlerSearch(controlSearchResults);
+  // handlerClick listens to the click event on the parent element (button)
   paginationView.addHandlerClick(controlPagination)
 }
 init();
