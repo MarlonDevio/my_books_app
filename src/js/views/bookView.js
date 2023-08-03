@@ -12,6 +12,15 @@ class BookView extends View {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  addHandlerUpdateQuantity(handler) {
+    this._parentElement.addEventListener('click', function(e) {
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+      const  { updateTo }  = btn.dataset;
+      // + is for converting string to number
+      if (+updateTo > 0)handler(+updateTo);
+    })
+  }
   _generateMarkup() {
     return `
  <figure class='book__fig'>
@@ -33,16 +42,16 @@ class BookView extends View {
         <svg class='book__info-icon'>
           <use href='src/img/icons.svg#icon-users'></use>
         </svg>
-        <span class='book__info-data book__info-data--people'>4</span>
-        <span class='book__info-text'>servings</span>
+        <span class='book__info-data book__info-data--people'>${this._data.quantity}</span>
+        <span class='book__info-text'>book${this._data.quantity > 1 ? 's' : ''}</span>
 
         <div class='book__info-buttons'>
-          <button class='btn--tiny btn--increase-servings'>
+          <button class='btn--tiny btn--update-servings' data-update-to='${this._data.quantity - 1}'>
             <svg>
               <use href='src/img/icons.svg#icon-minus-circle'></use>
             </svg>
           </button>
-          <button class='btn--tiny btn--increase-servings'>
+          <button class='btn--tiny btn--update-servings' data-update-to='${this._data.quantity + 1}'>
             <svg>
               <use href='src/img/icons.svg#icon-plus-circle'></use>
             </svg>
@@ -60,7 +69,7 @@ class BookView extends View {
     </div>
 
     <div class='book__categories'>
-      <h2 class='heading--2'>Book pricing:</h2>
+      <h2 class='heading--2'>Book pricing: ${this._data.price}</h2>
       <h2 class='heading--2'>book categories</h2>
       <ul class='book__categorie-list'>
       ${this._data.categories.map(this._generateMarkupCategory)

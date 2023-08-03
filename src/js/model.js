@@ -20,7 +20,6 @@ export const loadBook = async function(id) {
 // controller imports state, model exports state)
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
-    console.log(data);
     const { volumeInfo } = data;
     state.volumeInfo = {
       id: data.id,
@@ -39,6 +38,7 @@ export const loadBook = async function(id) {
       //TODO ==> Salebility check if for sale or not
       price: data.saleInfo.listPrice?.amount,
       currency: data.saleInfo.listPrice?.currencyCode,
+      quantity: 1,
     };
   } catch (err) {
     throw err;
@@ -49,6 +49,7 @@ export const loadBook = async function(id) {
 Loading search results
  */
 export const loadSearchResults = async function(query) {
+  // TODO => make sure that no double books are shown, as is now the case
   try {
     state.search.query = query;
     const data = await getJSON(
@@ -91,8 +92,10 @@ state.search.page = page;
 
 export const updateQuantity = function (newQuantity) {
 // reach into the state (book pricing) and then change the price in the book view
-
- state.volumeInfo.price =  state.volumeInfo.price * newQuantity
-  console.log(state.volumeInfo.price);
+  const oldQt = state.volumeInfo.quantity
+ state.volumeInfo.price =  (state.volumeInfo.price * newQuantity) / oldQt
+ state.volumeInfo.quantity = newQuantity
   // newQt = oldQt * newQt / oldQt
+
+
 }
