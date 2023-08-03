@@ -5,6 +5,9 @@ import ResultsView from './views/resultsView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 
+/*
+controlling the book view
+ */
 const controlBooks = async function() {
   try {
     const id = window.location.hash.slice(1);
@@ -23,7 +26,10 @@ const controlBooks = async function() {
   }
 };
 
-const controlSearchResults = async function () {
+/*
+controlling the search results
+ */
+const controlSearchResults = async function() {
   // we only want to listen for this event after the page has loaded and then listen for the event => publisher
   // subscriber pattern
   try {
@@ -48,22 +54,44 @@ const controlSearchResults = async function () {
   }
 };
 
-// controlPagination is the controller function for the pagination buttons
-// (next, prev, etc) => it will be called by the event listener in the
-// paginationView module
-// the goToPage argument is the page number that is clicked on
+/*
+controlling the pagination
+ */
+
 const controlPagination = function(goToPage) {
+  /* controlPagination is the controller function for the pagination buttons
+   (next, prev, etc) => it will be called by the event listener in the
+   paginationView module
+   the goToPage argument is the page number that is clicked o
+   */
+
   // 1) Render NEW results
   resultsView.render(model.getSearchResultsPage(goToPage));
 
   // 2) Render NEW pagination buttons
   paginationView.render(model.state.search);
-}
+};
 
+/*
+controlling the quantity
+ */
+
+const controlQuantity = function() {
+  // update the quantity in the state
+  //! we don't manipulate data in the controller => delegate to the model
+  model.updateQuantity(6);
+
+  // update the book view
+
+};
+
+/*
+initializing the app and it's functionality
+ */
 const init = function() {
   bookView.addHandlerRender(controlBooks);
   searchView.addHandlerSearch(controlSearchResults);
   // handlerClick listens to the click event on the parent element (button)
-  paginationView.addHandlerClick(controlPagination)
-}
+  paginationView.addHandlerClick(controlPagination);
+};
 init();

@@ -12,9 +12,12 @@ export const state = {
   },
 };
 
+/*
+Loading a single book
+ */
+export const loadBook = async function(id) {
 // Change our state object, live connection between exports and imports (
 // controller imports state, model exports state)
-export const loadBook = async function(id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
     console.log(data);
@@ -37,7 +40,6 @@ export const loadBook = async function(id) {
       price: data.saleInfo.listPrice?.amount,
       currency: data.saleInfo.listPrice?.currencyCode,
     };
-    console.log(state.volumeInfo.price);
   } catch (err) {
     throw err;
   }
@@ -46,7 +48,6 @@ export const loadBook = async function(id) {
 /*
 Loading search results
  */
-
 export const loadSearchResults = async function(query) {
   try {
     state.search.query = query;
@@ -77,10 +78,21 @@ export const loadSearchResults = async function(query) {
   }
 };
 
+/*
+Pagination
+ */
 export const getSearchResultsPage = function (page = state.search.page) {
 state.search.page = page;
  const start = (page-1) * state.search.resultsPerPage //0;
  const end = page * state.search.resultsPerPage //9; // slice doesnt include the last
   // (so 9)
   return state.search.results.slice(start, end)
+}
+
+export const updateQuantity = function (newQuantity) {
+// reach into the state (book pricing) and then change the price in the book view
+
+ state.volumeInfo.price =  state.volumeInfo.price * newQuantity
+  console.log(state.volumeInfo.price);
+  // newQt = oldQt * newQt / oldQt
 }

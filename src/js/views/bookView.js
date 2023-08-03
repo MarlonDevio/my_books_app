@@ -60,6 +60,7 @@ class BookView extends View {
     </div>
 
     <div class='book__categories'>
+      <h2 class='heading--2'>Book pricing:</h2>
       <h2 class='heading--2'>book categories</h2>
       <ul class='book__categorie-list'>
       ${this._data.categories.map(this._generateMarkupCategory)
