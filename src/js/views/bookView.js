@@ -16,11 +16,22 @@ class BookView extends View {
     this._parentElement.addEventListener('click', function(e) {
       const btn = e.target.closest('.btn--update-servings');
       if (!btn) return;
-      const  { updateTo }  = btn.dataset;
+      const { updateTo } = btn.dataset;
       // + is for converting string to number
-      if (+updateTo > 0)handler(+updateTo);
-    })
+      if (+updateTo > 0) handler(+updateTo);
+    });
   }
+
+  addHandlerAddBookmark(handler) {
+    this._parentElement.addEventListener('click', function(e) {
+      // by the time the page loads, this element doens't exist yet, so we
+      // use event delegation
+      const btn = e.target.closest('.btn--bookmark');
+      if (!btn) return;
+      handler();
+    });
+  }
+
   _generateMarkup() {
     return `
  <figure class='book__fig'>
@@ -61,9 +72,9 @@ class BookView extends View {
 
       <div class='book__user-generated'>
       </div>
-      <button class='btn--round'>
+      <button class='btn--round btn--bookmark'>
         <svg class=''>
-          <use href='src/img/icons.svg#icon-bookmark-fill'></use>
+          <use href='${icons}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}'></use>
         </svg>
       </button>
     </div>
