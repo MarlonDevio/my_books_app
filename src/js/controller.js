@@ -4,6 +4,7 @@ import searchView from './views/searchView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
 import bookmarksView from './views/bookmarksView.js'
+import addBookView from './views/addBookView.js';
 
 //TT controlling the book view
 const controlBooks = async function() {
@@ -15,14 +16,17 @@ const controlBooks = async function() {
 
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage());
-    // 1) Loading book (here we get acces to the state object)
+
+    // 1) Update bookmarks view
+    bookmarksView.update(model.state.bookmarks)
+
+    // 2) Loading book (here we get acces to the state object)
     await model.loadBook(id);
 
-    // 2) Rendering book
+    // 3) Rendering book
     bookView.render(model.state.volumeInfo);
 
-    // 3) Update bookmarks view
-    bookmarksView.update(model.state.bookmarks)
+
   } catch (err) {
     bookView.renderError();
   }
@@ -93,8 +97,18 @@ const controlAddBookmark = function() {
   bookmarksView.render(model.state.bookmarks)
 };
 
+const controlBookmarks = function() {
+  bookmarksView.render(model.state.bookmarks)
+}
+
+const controlAddBook = function(newBook) {
+
+}
 //TT initializing the app and it's functionality
 const init = function() {
+  // rendering bookmarks
+  bookmarksView.addHandlerRender(controlBookmarks);
+
   // rendering book
   bookView.addHandlerRender(controlBooks);
 
@@ -109,5 +123,8 @@ const init = function() {
 
   // handlerClick listens to the click event on the parent element (button)
   paginationView.addHandlerClick(controlPagination);
+
+  //
+  addBookView.addHandlerUpload(controlAddBook);
 };
 init();
