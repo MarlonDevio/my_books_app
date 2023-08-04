@@ -10,6 +10,7 @@ export const state = {
     resultsPerPage: RES_PER_PAGE,
     page: 1,
   },
+  bookmarks: [],
 };
 
 /*
@@ -39,7 +40,11 @@ export const loadBook = async function(id) {
       price: data.saleInfo.listPrice?.amount,
       currency: data.saleInfo.listPrice?.currencyCode,
       quantity: 1,
+
     };
+    if (state.bookmarks.some(bookmark => bookmark.id === id))
+      state.volumeInfo.bookmarked = true;
+    else state.volumeInfo.bookmarked = false;
   } catch (err) {
     throw err;
   }
@@ -73,6 +78,8 @@ export const loadSearchResults = async function(query) {
         image: item.volumeInfo.imageLinks?.thumbnail,
       };
     });
+    // reset the search results to page 1
+    state.search.page = 1;
   } catch (err) {
     console.error(`${err} error`);
     throw err;
@@ -82,20 +89,53 @@ export const loadSearchResults = async function(query) {
 /*
 Pagination
  */
-export const getSearchResultsPage = function (page = state.search.page) {
-state.search.page = page;
- const start = (page-1) * state.search.resultsPerPage //0;
- const end = page * state.search.resultsPerPage //9; // slice doesnt include the last
+export const getSearchResultsPage = function(page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage; //0;
+  const end = page * state.search.resultsPerPage; //9; // slice doesnt include the last
   // (so 9)
-  return state.search.results.slice(start, end)
-}
+  return state.search.results.slice(start, end);
+};
 
-export const updateQuantity = function (newQuantity) {
+export const updateQuantity = function(newQuantity) {
 // reach into the state (book pricing) and then change the price in the book view
-  const oldQt = state.volumeInfo.quantity
- state.volumeInfo.price =  (state.volumeInfo.price * newQuantity) / oldQt
- state.volumeInfo.quantity = newQuantity
+  const oldQt = state.volumeInfo.quantity;
+  state.volumeInfo.price = (state.volumeInfo.price * newQuantity) / oldQt;
+  state.volumeInfo.quantity = newQuantity;
   // newQt = oldQt * newQt / oldQt
+};
 
+//TT local storage
+const persistBookmarks = function() {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
 
-}
+//TT adding bookmarks
+export const addBookmark = function(book) {
+  // Add bookmark
+  state.bookmarks.push(book);
+
+  // Mark current book as bookmark
+  if (book.id === state.volumeInfo.id) state.volumeInfo.bookmarked = true;
+
+  persistBookmarks();
+};
+
+//TT removing bookmarks
+export const deleteBookmark = function(id) {
+  // Delete bookmark
+  const index = state.bookmarks.findIndex(el => el.id === id);
+  state.bookmarks.splice(index, 1);
+
+  // Mark current book as NOT bookmarked
+  if (id === state.volumeInfo.id) state.volumeInfo.bookmarked = false;
+
+  persistBookmarks();
+};
+
+const init = function() {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+console.log(state.bookmarks);

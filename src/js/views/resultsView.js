@@ -1,33 +1,15 @@
 import View from './View.js';
+import previewView from './previewView.js';
 import icons from '../../img/icons.svg';
 
-//TODO error rendering in the search
 class ResultsView extends View {
   _parentElement = document.querySelector('.results');
   _errorMessage = 'No books found. Please try again! ;)';
   _successMessage= '';
 
-  _generateMarkup() {
-    return this._data.map(this._generateMarkupPreview)
+   _generateMarkup() {
+    return this._data.map(result => previewView.render(result, false))
       .join('');
-  }
-
-  _generateMarkupPreview(result) {
-    const id = window.location.hash.slice(1);
-
-    return `
-    <li class='preview'>
-      <a class='preview__link ${result.id === id ? 'preview__link--active' : ''} ' href='#${result.id}'>
-        <figure class='preview__fig'>
-          <img src='${result.image}' alt='${result.title}' />
-        </figure>
-        <div class='preview__data'>
-          <h4 class='preview__title'>${result.title}</h4>
-          <p class='preview__publisher'>${result.publisher}</p>
-        </div>
-      </a>
-    </li>
-`;
   }
 }
 

@@ -5,13 +5,16 @@ export default class View {
 // it as default and not as a named export or as a new instance.
   _data;
 
-  render(data) {
+  render(data, render = true) {
     // guard clause
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
     // book gets stored in the state object, then gets passed as the data argument
     this._data = data;
     const markup = this._generateMarkup();
+
+    if(!render) return markup;
+
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }

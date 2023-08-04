@@ -1,9 +1,9 @@
 import * as model from './model.js';
 import bookView from './views/bookView.js';
 import searchView from './views/searchView.js';
-import ResultsView from './views/resultsView.js';
 import resultsView from './views/resultsView.js';
 import paginationView from './views/paginationView.js';
+import bookmarksView from './views/bookmarksView.js'
 
 //TT controlling the book view
 const controlBooks = async function() {
@@ -21,6 +21,8 @@ const controlBooks = async function() {
     // 2) Rendering book
     bookView.render(model.state.volumeInfo);
 
+    // 3) Update bookmarks view
+    bookmarksView.update(model.state.bookmarks)
   } catch (err) {
     bookView.renderError();
   }
@@ -51,7 +53,6 @@ const controlSearchResults = async function() {
     console.log(err);
   }
 };
-
 //TT controlling the pagination
 const controlPagination = function(goToPage) {
   /* controlPagination is the controller function for the pagination buttons
@@ -77,6 +78,21 @@ const controlQuantity = function(newQuantity) {
   bookView.update(model.state.volumeInfo);
 };
 
+//TT Contoller for the add bookmarks
+const controlAddBookmark = function() {
+  // 1) Add/remove bookmark
+  if (!model.state.volumeInfo.bookmarked) model.addBookmark(
+    model.state.volumeInfo);
+  else  model.deleteBookmark(
+    model.state.volumeInfo.id);
+
+  // 2) Update bookView
+  bookView.update(model.state.volumeInfo);
+
+  // 3) Render bookmarks
+  bookmarksView.render(model.state.bookmarks)
+};
+
 //TT initializing the app and it's functionality
 const init = function() {
   // rendering book
@@ -84,6 +100,9 @@ const init = function() {
 
   // updating quantity and price
   bookView.addHandlerUpdateQuantity(controlQuantity);
+
+  // adding bookmarks
+  bookView.addHandlerAddBookmark(controlAddBookmark);
 
   // handlerSearch listens to the submit event on the parent element (form)
   searchView.addHandlerSearch(controlSearchResults);
