@@ -102,7 +102,7 @@ const controlBookmarks = function() {
 }
 
 const controlAddBook = function(newBook) {
-
+ model.uploadBook(newBook)
 }
 //TT initializing the app and it's functionality
 const init = function() {

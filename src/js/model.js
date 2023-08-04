@@ -143,3 +143,15 @@ init();
 const clearBookmarks = function() {
   localStorage.clear('bookmarks');
 }
+
+export const uploadBook = async function(newBook) {
+  console.log(newBook);
+  const categories = Object.entries(newBook).filter(
+entry => entry[0].startsWith('category') && entry[1] !== '',
+  ).map(cat => {
+    const [quantity, test, description] = cat[1].replaceAll(' ', '').split(',');
+    return { quantity, test, description };
+
+  })
+  console.log(categories);
+}
