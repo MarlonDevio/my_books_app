@@ -1,4 +1,4 @@
-import { API_KEY } from '../../env.js';
+import { API_KEY } from "./env.js";
 import { API_URL, RES_PER_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
