@@ -1,6 +1,7 @@
 import View from './View.js';
 import icons from '../../img/icons.svg';
 
+
 class BookView extends View {
   _parentElement = document.querySelector('.book');
   _errorMessage = 'We could not find that book. Please try another one!';
@@ -43,9 +44,8 @@ class BookView extends View {
 
     <div class='book__details'>
       <div class='book__info'>
-        <svg class='book__info-icon'>
-          <use href='src/img/icons.svg#icon-clock'></use>
-        </svg>
+        <img class="star" src="src/img/star.svg" alt="" style="height: 2.5rem; margin-right: 1rem">
+        
         <span class='book__info-data book__info-data--rating'>${this._data.avgRating}</span>
         <span class='book__info-text'>rating</span>
       </div>
