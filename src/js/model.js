@@ -1,4 +1,4 @@
-import { API_KEY } from "./env.js";
+const API_KEY = 'AIzaSyD-5zqQZ6Z4j7u4QZ3X0Z3QZ3X0Z3QZ3X0';
 import { API_URL, RES_PER_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
